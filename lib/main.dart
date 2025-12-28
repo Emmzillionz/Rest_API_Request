@@ -8,22 +8,22 @@ import 'screens/user_screen.dart';
 
 void main() {
   final repo = UserRepository();
-  runApp(MyApp(repo: repo));
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (_) => UserBloc(repo)..add(const LoadUsers(),),)
+  ], child: MyApp(repo: repo)));
 }
 
 class MyApp extends StatelessWidget {
   final UserRepository repo;
+
   const MyApp({super.key, required this.repo});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Flutter BLoC API Demo',
       debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-        create: (_) => UserBloc(repo)..add(const LoadUsers()),
-        child: const UserScreen(),
-      ),
+      home: UserScreen(),
     );
   }
 }
